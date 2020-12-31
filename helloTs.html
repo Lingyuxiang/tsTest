@@ -6,10 +6,40 @@
     <link rel="stylesheet" href="./index.js">
 </head>
 <body>
-    
+    66666
+    <canvas id="canid" style="width:200px;height:200px"></canvas>
 </body>
 <script>
     console.log('我是peopleA整改')
-    
+    var drawing = document.getElementById('canid')
+    if(drawing.getContext){
+        var gl = drawing.getContext('experimental-webgl')
+        if(gl){
+            console.log('ss')
+            gl.clearColor(0.8,0.8,0.8,1)
+            gl.clear(gl.COLOR_BUFFER_BIT)
+            // 定义视口，原点在左下角，定义好视口后，视口内部坐标系原点在中心
+            gl.viewport(0,0,drawing.width,drawing.height)
+
+            // 接下来绘制顶点，顶点信息保存在javascript的类型化数组中，使用前必须转换到webgl缓冲区。
+            // 创建缓冲区↓
+            var buffer = gl.createBuffer()
+            gl.bindBuffer(gl.ARRAY_BUFFER,buffer)
+            // 之后所有操作都在buffer中进行
+            gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([0,0.5,1]),gl.STATIC_DRAW)
+
+            // 在缓冲区页面重载之前，缓冲区buffer一直存在，释放内存↓
+            // gl.deleteBuffer(buffer)
+
+            // 顶点着色器：将3D顶点转为2D点
+            // 片段着色器：规定每个像素的渲染方式
+            // 用GLSL语言写的
+            // 定义顶点着色器↓
+            attribute vec2 aVertexPoaition;
+            void main(){
+                gl_position = vec4(aVertexPoaition,0.0,1.0)
+            }
+        }
+    }
 </script>
 </html>
